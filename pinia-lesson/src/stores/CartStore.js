@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { groupBy } from "lodash"
 export const useCartStore = defineStore("CartStore", {
     state: () => {
         return {
@@ -14,8 +15,11 @@ export const useCartStore = defineStore("CartStore", {
         // isEmpty(){
         //     return this.count === 0
         // }
+        grouped: (state) => groupBy(state.items, item => item.name),
+        groupCount: (state) => (name) => state.grouped[name].length
+
     },
-    actions: {
+    actions: { // actions are about mutating global states not getting them
         addItems(count, item) {
             count = parseInt(count);
             for(let index= 0;index < count;index++){

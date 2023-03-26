@@ -17,20 +17,17 @@ const active = ref(false);
     </span>
     <!-- Modal Overlay only shows when cart is clicked on -->
     <AppModalOverlay :active="active" @close="active = false">
-      <div v-if="cartStore.count > 0">
+      <div v-if="!cartStore.isEmpty > 0">
         <ul class="items-in-cart">
           <CartItem
-            :product="{ name: 'Dried Pineapple', price: 5 }"
-            :count="5"
+            v-for="(items, name) in cartStore.grouped"
+            :key="name"
+            :product="items[0]"
+            :count="items.length"
             @updateCount=""
             @clear=""
           />
-          <CartItem
-            :product="{ name: 'Pineapple Gum', price: 3 }"
-            :count="5"
-            @updateCount=""
-            @clear=""
-          />
+          <!-- :count="cartStore.groupCount(name)"  you can also use this for the count above -->
         </ul>
         <div class="flex justify-end text-2xl mb-5">
           Total: <strong>$40</strong>
