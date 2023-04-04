@@ -6,6 +6,19 @@ import { useCartStore } from '@/stores/CartStore';
 import {storeToRefs} from 'pinia'
 const productStore = useProductStore();
 const cartStore = useCartStore();
+cartStore.$onAction(({
+      name,
+      store,
+      args,
+      after,
+      onError
+    }) => {
+      if(name === 'addItems') {
+        after(() => {
+          console.log(args[0])
+        })
+      }
+    })
 // const {products} = storeToRefs(useProductStore()); //destructed version
 productStore.fill();
 //// the addToCart method is no longer in use since we added an action to CartStore to do this logic for us
@@ -27,6 +40,10 @@ productStore.fill();
 <template>
   <div class="container">
     <TheHeader />
+    <div class="mb-5 flex justify-end">
+      <AppButton @click="cartStore.undo">Undo </AppButton>
+      <AppButton class="ml-2" @click="cartStore.redo">Redo </AppButton>
+    </div>
     <ul class="sm:flex flex-wrap lg:flex-nowrap gap-5">
       <ProductCard
         v-for="product in productStore.products"
